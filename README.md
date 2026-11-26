@@ -26,6 +26,7 @@ flowchart LR
 - Docker
 - Kind, kubectl, Helm
 - An Argo CD installation in the local cluster
+- Metrics Server for HPA metrics in the Kind cluster
 
 ## Quick start
 
@@ -59,9 +60,11 @@ The optional Kyverno policy in `policies/kyverno` requires CPU and memory reques
 
 ## Operational notes
 
+- HPA needs Metrics Server; install and configure it for Kind before expecting CPU-based scaling.
 - HPA and KEDA should not control the same scale target at the same time. Pick one controller for each workload.
 - The PDB protects voluntary disruptions; it does not prevent node failure or guarantee application availability.
-- This lab uses a public NGINX image and contains no credentials or cloud resources.
+- The NGINX workload uses the unprivileged image, a read-only root filesystem, and a writable `/tmp` volume.
+- This lab contains no credentials or cloud resources.
 
 ## License
 

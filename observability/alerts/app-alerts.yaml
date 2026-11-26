@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: demo-web-alerts
+  namespace: monitoring
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: demo-web.availability
+      rules:
+        - alert: DemoWebReplicasBelowDesired
+          expr: kube_deployment_status_replicas_available{namespace="demo",deployment="demo-web"} < 2
+          for: 5m
+          labels:
+            severity: warning
+            service: demo-web
+          annotations:
+            summary: "Demo web has fewer than two available replicas"
+            description: "Review the demo-web Deployment, node capacity, and recent rollout events."
